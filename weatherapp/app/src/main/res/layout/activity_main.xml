@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:text="Get Weather "
+        android:id="@+id/button_update_weather"
+        android:layout_marginBottom="184dp"
+        android:layout_width="150dp"
+        android:layout_height="70dp"
+        android:background="@color/colorPrimary"
+        android:textColor="?attr/colorButtonNormal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_above="@+id/button_update_weather"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="13dp"
+        android:id="@+id/edit_text_city"
+        android:hint="Enter City Here"
+        android:singleLine="true" />
+
+    <TextView
+        android:text="Get The Current Weather For Any City"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_view_instructions"
+        android:layout_above="@+id/edit_text_city"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="27dp"
+        android:typeface="normal"
+        android:textStyle="normal|bold"
+        android:textSize="18sp" />
+
+    <TextView
+        android:text="Current Weather will go here "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_view_weather"
+        android:textSize="30sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="textStart"
+        android:layout_margin="10dp" />
+</RelativeLayout>
