@@ -2,4 +2,5 @@
     <string name="app_name">weatherapp</string>
     <string name="weather_api_key">38a6433be73ae261b56b5883a61f7d0a</string>
     <string name="weather_base_url">api.openweathermap.org/data/</string>
+    <string name="city_name_empty">City name cannot be empty</string>
 </resources>
