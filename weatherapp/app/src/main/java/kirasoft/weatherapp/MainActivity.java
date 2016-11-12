@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by dakotajustin on 11/11/16.
@@ -35,6 +37,19 @@ public class MainActivity extends Activity implements MainView.RequiredViewOps {
         ButterKnife.bind(this);
     }
 
+    @OnClick(R.id.button_update_weather)
+    public void updateWeatherClick()
+    {
+        String city = editCity.getText().toString();
+
+        //city name can't be empty
+        if(city.isEmpty()){
+            Toast.makeText(this, getString(R.string.city_name_empty), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        presenter.clickUpdateWeatherText(city, weatherText);
+    }
 
 
     @Override
@@ -45,12 +60,6 @@ public class MainActivity extends Activity implements MainView.RequiredViewOps {
     @Override
     public Context getActivityContext() {
         return this;
-    }
-
-    @Override
-    public void updateCurrentWeather(Weather weather) {
-        //TODO:
-        //display current weather as text in textview
     }
 
 }
