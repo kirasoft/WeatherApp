@@ -1,11 +1,16 @@
 package kirasoft.weatherapp;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
+
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by dakotajustin on 11/11/16.
@@ -21,6 +26,9 @@ public class MainPresenter implements MainView.RequiredPresenterOps, MainView.Pr
 
     //ensures only one api request is going on at once
     private boolean isSearching = false;
+
+    //tag for logging
+    private static final String TAG = "MainPresenter";
 
     //constructor
     public MainPresenter(MainView.RequiredViewOps ops) {
@@ -70,8 +78,13 @@ public class MainPresenter implements MainView.RequiredPresenterOps, MainView.Pr
         }
     }
 
+    /**
+     * Get weather report from user entered city.
+     * @param cityStr Name of city weather report will search for
+     * @param weatherTextView Textview to update with weather report
+     */
     @Override
-    public void clickUpdateWeatherText(String weatherStr, TextView weatherTextView) {
+    public void clickUpdateWeatherText(final String cityStr, final TextView weatherTextView) {
         //if waiting for api request, let user know they need to wait
         if(isSearching) {
             Toast.makeText(getAppContext(), "Wait for current request to finish before you search again",
@@ -80,9 +93,34 @@ public class MainPresenter implements MainView.RequiredPresenterOps, MainView.Pr
         }
 
         isSearching = true;
-        weatherTextView.setText(weatherStr);
-        //TODO: Api request
+       // weatherTextView.setText(weatherStr);
+        //TODO: Dependency injection and Bus System
+        WeatherService weatherService = WeatherRetrofit.createRetrofitService(WeatherService.class, WeatherService.BASE_URL);
+        weatherService.getWeatherReport(cityStr)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<WeatherReport>() {
+                    @Override
+                    public void onCompleted() {
+                        //always gets called wether error or success
+                        isSearching = false;
+                    }
 
-        isCitySearched = true;
+                    @Override
+                    public void onError(Throwable e) {
+                        //if there was an issue
+                        Log.e(TAG, "Issue getting weather report from " + cityStr, e);
+                    }
+
+                    @Override
+                    public void onNext(WeatherReport weatherReport) {
+                        //update weather text
+                        weatherTextView.setText(weatherReport.getFullWeatherReading());
+                        isCitySearched = true;
+                    }
+                });
+
+
     }
+
 }
