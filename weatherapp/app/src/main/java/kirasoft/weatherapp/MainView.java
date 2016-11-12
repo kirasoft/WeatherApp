@@ -1,8 +1,8 @@
 package kirasoft.weatherapp;
 
 import android.content.Context;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * Created by dakotajustin on 11/11/16.
@@ -19,7 +19,7 @@ public interface MainView {
         // View operations permitted to Presenter
         Context getAppContext();
         Context getActivityContext();
-        void updateCurrentWeather(Weather weather);
+
     }
 
     /**
@@ -29,7 +29,7 @@ public interface MainView {
     interface ProvidedPresenterOps {
         // Presenter operations permitted to View
         void clickEnterCity(EditText editText);
-        void clickUpdateWeatherText(Button button);
+        void clickUpdateWeatherText(String weatherStr, TextView weatherTextView);
     }
 
     /**
@@ -39,6 +39,15 @@ public interface MainView {
         // Presenter operations permitted to Model
         Context getAppContext();
         Context getActivityContext();
+    }
+
+    /**
+     *  Provided methods for model to communicate with Presenter
+     */
+    interface ProvidedModelOps {
+        String getCurrentCity();
+        String getCurrentTemperature();
+        String getFullWeatherReading();
     }
 
 
