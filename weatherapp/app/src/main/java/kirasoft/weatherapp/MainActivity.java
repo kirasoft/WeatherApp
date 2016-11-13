@@ -16,9 +16,9 @@ import butterknife.OnClick;
  * Created by dakotajustin on 11/11/16.
  */
 
-public class MainActivity extends Activity implements MainView.RequiredViewOps {
+public class MainActivity extends Activity implements MainMvp.RequiredViewOps {
 
-    private MainView.ProvidedPresenterOps presenter;
+    private MainMvp.ProvidedPresenterOps presenter;
 
     @BindView(R.id.edit_text_city)
     EditText editCity;

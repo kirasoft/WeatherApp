@@ -8,7 +8,7 @@ import android.widget.TextView;
  * Created by dakotajustin on 11/11/16.
  */
 
-public interface MainView {
+public interface MainMvp {
 
     /**
      *   Required View methods available to Presenter.

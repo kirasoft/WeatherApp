@@ -16,10 +16,10 @@ import rx.schedulers.Schedulers;
  * Created by dakotajustin on 11/11/16.
  */
 
-public class MainPresenter implements MainView.RequiredPresenterOps, MainView.ProvidedPresenterOps {
+public class MainPresenter implements MainMvp.RequiredPresenterOps, MainMvp.ProvidedPresenterOps {
 
     //use a weak reference between activity could be destroyed at any moment
-    private WeakReference<MainView.RequiredViewOps> view;
+    private WeakReference<MainMvp.RequiredViewOps> view;
 
     //check if user has already pressed search for city so we can clear edit text field on click
     private boolean isCitySearched = false;
@@ -31,7 +31,7 @@ public class MainPresenter implements MainView.RequiredPresenterOps, MainView.Pr
     private static final String TAG = "MainPresenter";
 
     //constructor
-    public MainPresenter(MainView.RequiredViewOps ops) {
+    public MainPresenter(MainMvp.RequiredViewOps ops) {
         view = new WeakReference<>(ops);
     }
 
@@ -40,7 +40,7 @@ public class MainPresenter implements MainView.RequiredPresenterOps, MainView.Pr
      * Throw an exception if the view is unavailable
      * @return
      */
-    private MainView.RequiredViewOps getView() throws NullPointerException {
+    private MainMvp.RequiredViewOps getView() throws NullPointerException {
         if(view != null) {
             return view.get();
         } else {
