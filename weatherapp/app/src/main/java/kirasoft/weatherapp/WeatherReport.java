@@ -139,7 +139,7 @@ public class WeatherReport implements MainView.ProvidedModelOps {
 
         @Override
         public String getCurrentTemperature() {
-                return this.getMain().getTemp().toString() + "°";
+                return this.getMain().getTemp().toString() + " Kelvin";
         }
 
         @Override
