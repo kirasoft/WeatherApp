@@ -96,7 +96,7 @@ public class MainPresenter implements MainView.RequiredPresenterOps, MainView.Pr
        // weatherTextView.setText(weatherStr);
         //TODO: Dependency injection and Bus System
         WeatherService weatherService = WeatherRetrofit.createRetrofitService(WeatherService.class, WeatherService.BASE_URL);
-        weatherService.getWeatherReport(cityStr)
+        weatherService.getWeatherReport(cityStr, getAppContext().getString(R.string.weather_api_key))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<WeatherReport>() {
