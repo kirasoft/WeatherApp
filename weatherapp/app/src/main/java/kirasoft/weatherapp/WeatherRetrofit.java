@@ -1,6 +1,8 @@
 package kirasoft.weatherapp;
 
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by dakotajustin on 11/12/16.
@@ -14,6 +16,8 @@ public class WeatherRetrofit {
     static <T> T createRetrofitService(final Class<T> clazz, final String endPoint) {
         final Retrofit restAdapter = new Retrofit.Builder()
                 .baseUrl(endPoint)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         T service = restAdapter.create(clazz);
 

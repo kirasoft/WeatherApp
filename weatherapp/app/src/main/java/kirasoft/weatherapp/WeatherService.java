@@ -2,7 +2,7 @@ package kirasoft.weatherapp;
 
 
 import retrofit2.http.GET;
-import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -11,9 +11,9 @@ import rx.Observable;
 
 public interface WeatherService {
 
-    String BASE_URL = "api.openweathermap.org/data";
+    String BASE_URL = "http://api.openweathermap.org/data/";
 
-    @GET("/2.5/weather?q={city}&appid=38a6433be73ae261b56b5883a61f7d0a")
-    Observable<WeatherReport> getWeatherReport(@Path("city") String city);
+    @GET("2.5/weather")
+    Observable<WeatherReport> getWeatherReport(@Query("q") String city, @Query("appId") String appId);
 
 }
