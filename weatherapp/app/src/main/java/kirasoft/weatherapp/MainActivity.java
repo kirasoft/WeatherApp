@@ -35,6 +35,15 @@ public class MainActivity extends Activity implements MainView.RequiredViewOps {
         super.onCreate(bundle);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        //Initialize Presenter
+        setUp();
+    }
+
+    private void setUp() {
+        //create presenter
+        MainPresenter mainPresenter = new MainPresenter(this);
+        //set presenter
+        presenter = mainPresenter;
     }
 
     @OnClick(R.id.button_update_weather)
