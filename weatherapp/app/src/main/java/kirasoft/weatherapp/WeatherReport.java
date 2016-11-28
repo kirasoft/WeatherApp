@@ -139,20 +139,24 @@ public class WeatherReport implements MainMvp.ProvidedModelOps {
 
         @Override
         public String getCurrentTemperature() {
-                return this.getMain().getTemp().toString() + " Kelvin";
+                return this.getMain().getTemp().toString();
         }
 
         @Override
         public String getFullWeatherReading() {
                 String shortDescript = getWeather().get(0).getDescription();
-                String temp = getCurrentTemperature();
+                double temp = Double.parseDouble(getCurrentTemperature());
+                temp = ((temp - 273.15) * 9/5) + 32;
+                temp = Math.round(temp);
+                temp = (temp * 100.00) / 100.00;
+                String tempStr = String.valueOf(temp);
+                tempStr += "F";
                 String humidity = getMain().getHumidity().toString();
                 String windSpeed = getWind().getSpeed().toString();
                 String windTemp = getWind().getDeg().toString() + "°";
-                String fullDescription = shortDescript + " with a temperature of " + temp +
+                String fullDescription = shortDescript + " with a temperature of " + tempStr +
                         " and a humidity of " + humidity + ". Winds are at a speed of " + windSpeed +
                         " with a temperature of " + windTemp;
                 return fullDescription;
         }
 }
-
