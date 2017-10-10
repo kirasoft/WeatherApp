@@ -1,6 +1,7 @@
 package kirasoft.weatherapp;
 
 
+import kirasoft.weatherapp.Model.WeatherReport;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;
