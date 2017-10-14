@@ -10,6 +10,7 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
+import kirasoft.weatherapp.Model.RawWeatherReport;
 import kirasoft.weatherapp.Model.WeatherReport;
 import kirasoft.weatherapp.R;
 import kirasoft.weatherapp.Service.WeatherRetrofit;
@@ -80,10 +81,7 @@ public class MainPresenter implements MainMvp.RequiredPresenterOps, MainMvp.Prov
      * @param cityStr Name of city weather report will search for
      */
     @Override
-    public void clickUpdateWeatherText(
-            final String cityStr,
-            final TextView weatherTextView
-    ) {
+    public void clickUpdateWeatherText(final String cityStr, final TextView weatherTextView) {
         //if waiting for api request, let user know they need to wait
         if(isBusy) {
             Toast.makeText(getAppContext(), BUSY_SEARCH_WARNING,
@@ -101,7 +99,7 @@ public class MainPresenter implements MainMvp.RequiredPresenterOps, MainMvp.Prov
         weatherService.getWeatherReport(data)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<WeatherReport>() {
+                .subscribe(new Subscriber<RawWeatherReport>() {
                     @Override
                     public void onCompleted() {
                         //always gets called whether error or success
@@ -116,11 +114,20 @@ public class MainPresenter implements MainMvp.RequiredPresenterOps, MainMvp.Prov
                     }
 
                     @Override
-                    public void onNext(WeatherReport weatherReport) {
+                    public void onNext(RawWeatherReport rawWeatherReport) {
+
                         //update weather text
+                        if(rawWeatherReport.getWeatherReport() == null)
+                        {
+                            weatherTextView.setText("There was an error. Try again.");
+                            isBusy = false;
+                        }
+
+                        final WeatherReport weatherReport = rawWeatherReport.getWeatherReport();
+
                         final String weatherReading = weatherReport.getConditionReport().getText() + "\n"
-                                                                + "Current temperature is " + weatherReport.getTemperature() + "\n"
-                                                                + "Current Humidity is " +  weatherReport.getHumidity();
+                                                                + "Current temperature is " + (int)weatherReport.getTemperature() + "\u00b0F\n"
+                                                                + "Current Humidity is " +  (int)weatherReport.getHumidity() + "%";
 
                         weatherTextView.setText(weatherReading);
 

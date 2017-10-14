@@ -28,10 +28,8 @@ public class WeatherReport {
     @SerializedName("wind_mph")
     private double windSpeed;
 
-    @Expose
     private double humidity;
 
-    @Expose
     @SerializedName("feelslike_f")
     private double feelsLikeTemperature;
 

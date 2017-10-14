@@ -3,6 +3,7 @@ package kirasoft.weatherapp.Service;
 
 import java.util.Map;
 
+import kirasoft.weatherapp.Model.RawWeatherReport;
 import kirasoft.weatherapp.Model.WeatherReport;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -20,6 +21,6 @@ public interface WeatherService {
     String BASE_URL = "https://api.apixu.com/v1/";
 
     @GET("current.json")
-    Observable<WeatherReport> getWeatherReport(@QueryMap Map<String, String> options);
+    Observable<RawWeatherReport> getWeatherReport(@QueryMap Map<String, String> options);
 
 }
