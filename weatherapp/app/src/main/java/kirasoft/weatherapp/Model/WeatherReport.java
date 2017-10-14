@@ -1,7 +1,14 @@
 package kirasoft.weatherapp.Model;
 
+import android.content.res.Resources;
+import android.support.v7.app.AppCompatActivity;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import kirasoft.weatherapp.R;
+
+import static android.content.res.Resources.getSystem;
 
 /**
  * Created by d780694 on 10/10/17.
@@ -37,6 +44,12 @@ public class WeatherReport {
     }
 
     public ConditionReport getConditionReport() {
+        if(conditionReport == null) {
+            conditionReport = new ConditionReport();
+            conditionReport.setText("No condition report found");
+            conditionReport.setIconLink("");
+        }
+
         return conditionReport;
     }
 

@@ -1,4 +1,4 @@
-package kirasoft.weatherapp;
+package kirasoft.weatherapp.Service;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -13,7 +13,7 @@ public class WeatherRetrofit {
 
     //generic retrofit service creator
     //this is a pattern I love to follow in many of my apps
-    static <T> T createRetrofitService(final Class<T> clazz, final String endPoint) {
+    public static <T> T createRetrofitService(final Class<T> clazz, final String endPoint) {
         final Retrofit restAdapter = new Retrofit.Builder()
                 .baseUrl(endPoint)
                 .addConverterFactory(GsonConverterFactory.create())

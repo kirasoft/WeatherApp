@@ -1,4 +1,4 @@
-package kirasoft.weatherapp;
+package kirasoft.weatherapp.View;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +11,9 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import kirasoft.weatherapp.Presenter.MainMvp;
+import kirasoft.weatherapp.Presenter.MainPresenter;
+import kirasoft.weatherapp.R;
 
 /**
  * Created by dakotajustin on 11/11/16.
@@ -20,13 +23,13 @@ public class MainActivity extends Activity implements MainMvp.RequiredViewOps {
 
     private MainMvp.ProvidedPresenterOps presenter;
 
-    @BindView(R.id.edit_text_city)
+    @BindView(R.id.edittext_city)
     EditText editCity;
     @BindView(R.id.button_update_weather)
     Button updateWeather;
-    @BindView(R.id.text_view_instructions)
+    @BindView(R.id.textview_instructions)
     TextView instructions;
-    @BindView(R.id.text_view_weather)
+    @BindView(R.id.textview_weather)
     TextView weatherText;
 
 
@@ -40,10 +43,7 @@ public class MainActivity extends Activity implements MainMvp.RequiredViewOps {
     }
 
     private void setUp() {
-        //create presenter
-        MainPresenter mainPresenter = new MainPresenter(this);
-        //set presenter
-        presenter = mainPresenter;
+        presenter = new MainPresenter(this);
     }
 
     @OnClick(R.id.button_update_weather)
@@ -59,7 +59,6 @@ public class MainActivity extends Activity implements MainMvp.RequiredViewOps {
 
         presenter.clickUpdateWeatherText(city, weatherText);
     }
-
 
     @Override
     public Context getAppContext() {

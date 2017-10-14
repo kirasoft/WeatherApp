@@ -30,4 +30,5 @@ public class ConditionReport {
     public void setIconLink(String iconLink) {
         this.iconLink = iconLink;
     }
+
 }

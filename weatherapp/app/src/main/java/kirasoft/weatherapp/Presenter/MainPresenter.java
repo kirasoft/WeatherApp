@@ -1,4 +1,4 @@
-package kirasoft.weatherapp;
+package kirasoft.weatherapp.Presenter;
 
 import android.content.Context;
 import android.util.Log;
@@ -7,7 +7,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 
+import kirasoft.weatherapp.Model.WeatherReport;
+import kirasoft.weatherapp.R;
+import kirasoft.weatherapp.Service.WeatherRetrofit;
+import kirasoft.weatherapp.Service.WeatherService;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -18,31 +24,24 @@ import rx.schedulers.Schedulers;
 
 public class MainPresenter implements MainMvp.RequiredPresenterOps, MainMvp.ProvidedPresenterOps {
 
-    //use a weak reference between activity could be destroyed at any moment
-    private WeakReference<MainMvp.RequiredViewOps> view;
+    //use a WeakReference because activity could be destroyed at any moment
+    private WeakReference<MainMvp.RequiredViewOps> currentView;
+    private boolean isBusy;
 
-    //check if user has already pressed search for city so we can clear edit text field on click
-    private boolean isCitySearched = false;
-
-    //ensures only one api request is going on at once
-    private boolean isSearching = false;
-
-    //tag for logging
     private static final String TAG = "MainPresenter";
+    private static final String BUSY_SEARCH_WARNING = "Wait for current request to finish before you search again";
 
-    //constructor
     public MainPresenter(MainMvp.RequiredViewOps ops) {
-        view = new WeakReference<>(ops);
+        currentView = new WeakReference<>(ops);
     }
 
     /**
      * Return the view constructor
      * Throw an exception if the view is unavailable
-     * @return
      */
     private MainMvp.RequiredViewOps getView() throws NullPointerException {
-        if(view != null) {
-            return view.get();
+        if(currentView != null) {
+            return currentView.get();
         } else {
             throw new NullPointerException("View is not available");
         }
@@ -72,55 +71,62 @@ public class MainPresenter implements MainMvp.RequiredPresenterOps, MainMvp.Prov
     @Override
     public void clickEnterCity(EditText editText) {
         //clear edit text when user clicks on it
-        if(isCitySearched) {
+        if(!isBusy)
             editText.setText("");
-            isCitySearched = false;
-        }
     }
 
     /**
      * Get weather report from user entered city.
      * @param cityStr Name of city weather report will search for
-     * @param weatherTextView Textview to update with weather report
      */
     @Override
-    public void clickUpdateWeatherText(final String cityStr, final TextView weatherTextView) {
+    public void clickUpdateWeatherText(
+            final String cityStr,
+            final TextView weatherTextView
+    ) {
         //if waiting for api request, let user know they need to wait
-        if(isSearching) {
-            Toast.makeText(getAppContext(), "Wait for current request to finish before you search again",
+        if(isBusy) {
+            Toast.makeText(getAppContext(), BUSY_SEARCH_WARNING,
                     Toast.LENGTH_LONG).show();
             return;
         }
 
-        isSearching = true;
-       // weatherTextView.setText(weatherStr);
-        //TODO: Dependency injection and Bus System
+        isBusy = true;
+
+        Map<String, String> data = new HashMap<>();
+        data.put("key", getActivityContext().getString(R.string.weather_api_key));
+        data.put("q", cityStr);
+
         WeatherService weatherService = WeatherRetrofit.createRetrofitService(WeatherService.class, WeatherService.BASE_URL);
-        weatherService.getWeatherReport(cityStr, getAppContext().getString(R.string.weather_api_key))
+        weatherService.getWeatherReport(data)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<WeatherReport>() {
                     @Override
                     public void onCompleted() {
-                        //always gets called wether error or success
-                        isSearching = false;
+                        //always gets called whether error or success
+                        isBusy = false;
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         //if there was an issue
                         Log.e(TAG, "Issue getting weather report from " + cityStr, e);
+                        isBusy = false;
                     }
 
                     @Override
                     public void onNext(WeatherReport weatherReport) {
                         //update weather text
-                        weatherTextView.setText(weatherReport.getFullWeatherReading());
-                        isCitySearched = true;
+                        final String weatherReading = weatherReport.getConditionReport().getText() + "\n"
+                                                                + "Current temperature is " + weatherReport.getTemperature() + "\n"
+                                                                + "Current Humidity is " +  weatherReport.getHumidity();
+
+                        weatherTextView.setText(weatherReading);
+
+                        isBusy = false;
                     }
                 });
-
-
     }
 
 }

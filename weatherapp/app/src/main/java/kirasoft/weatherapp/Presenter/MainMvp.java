@@ -1,4 +1,4 @@
-package kirasoft.weatherapp;
+package kirasoft.weatherapp.Presenter;
 
 import android.content.Context;
 import android.widget.EditText;

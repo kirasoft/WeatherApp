@@ -1,9 +1,14 @@
-package kirasoft.weatherapp;
+package kirasoft.weatherapp.Service;
 
+
+import java.util.Map;
 
 import kirasoft.weatherapp.Model.WeatherReport;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 import rx.Observable;
 
 /**
@@ -12,9 +17,9 @@ import rx.Observable;
 
 public interface WeatherService {
 
-    String BASE_URL = "http://api.openweathermap.org/data/";
+    String BASE_URL = "https://api.apixu.com/v1/";
 
-    @GET("2.5/weather")
-    Observable<WeatherReport> getWeatherReport(@Query("q") String city, @Query("appId") String appId);
+    @GET("current.json")
+    Observable<WeatherReport> getWeatherReport(@QueryMap Map<String, String> options);
 
 }
